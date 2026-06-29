@@ -1,0 +1,648 @@
+# Personal Academic & Research Operating System (PAROS)
+
+## Role
+
+You are an expert Full-Stack Software Engineer, UI/UX Designer, Database Architect, and Software Project Planner.
+
+Your task is to build a professional, production-quality web application that serves as my personal academic operating system.
+
+This is **not** a habit tracker. It is a long-term productivity platform designed to help me manage my university studies, research, exams, projects, and learning history.
+
+The application must be modular, scalable, maintainable, and designed to grow over many years.
+
+Do **not** generate the entire project at once. Build it step by step with my approval after each phase.
+
+---
+
+# About Me
+
+I am a Mechanical Engineering student.
+
+My priorities are:
+
+1. Academic Study (Highest Priority)
+2. Research (Optional)
+3. Engineering Projects (Optional)
+4. Exercise (Simple Tracking)
+5. Daily Prayer (Simple Tracking)
+
+The application should always prioritize academic success.
+
+---
+
+# Technology Stack
+
+Frontend
+
+* React
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* React Router
+
+Backend
+
+* Python FastAPI
+
+Database
+
+* PostgreSQL
+
+ORM
+
+* SQLAlchemy
+
+Charts
+
+* Recharts
+
+Authentication
+
+* Local authentication
+
+Icons
+
+* Lucide
+
+Deployment
+
+* Local development first
+* Docker support
+
+---
+
+# UI Requirements
+
+The interface should be:
+
+* Modern
+* Minimal
+* Professional
+* Fast
+* Responsive
+* Dark Mode
+* Light Mode
+* Smooth animations
+* Beautiful dashboard
+* Clean typography
+* Consistent spacing
+
+Inspired by:
+
+* Linear
+* Notion
+* GitHub
+* Apple
+
+Avoid clutter.
+
+---
+
+# Dashboard
+
+The Dashboard should be the application's home page.
+
+Display
+
+* Today's Date
+* Current Semester
+* Today's Study Hours
+* Weekly Study Hours
+* Monthly Study Hours
+* Today's Research Hours
+* Upcoming Exams
+* Current Study Streak
+* Current Research Streak
+* Prayer Summary
+* Exercise Status
+* Quick Notes
+* Recent Activity
+* Recently Opened Subjects
+* Pinned Projects
+
+Everything should update automatically.
+
+---
+
+# Subject Management
+
+Do NOT hardcode subjects.
+
+Instead, create a Subject Management system.
+
+I should be able to:
+
+* Create subjects
+* Edit subjects
+* Archive subjects
+* Delete subjects
+
+Each subject should contain:
+
+* Name
+* Semester
+* Instructor (Optional)
+* Credits (Optional)
+* Color
+* Notes
+* Resources
+* Chapters
+* Progress
+* Total Study Hours
+
+Examples could be:
+
+Heat Transfer
+
+Machine Design
+
+Fluid Mechanics
+
+Manufacturing
+
+Statistics
+
+Machine Learning
+
+Python
+
+But these should only be examples.
+
+The application must allow me to create any subject.
+
+---
+
+# Academic Study Tracker
+
+This is the most important module.
+
+Each study session should include:
+
+Date
+
+Start Time
+
+End Time
+
+Duration
+
+Session Type
+
+* 1 Hour
+* 30 Minutes
+* 10 Minutes
+
+Subject
+
+Topic
+
+Goal
+
+Focus Rating (1–5)
+
+Completion Status
+
+Notes
+
+Automatically calculate:
+
+* Daily Study Hours
+* Weekly Study Hours
+* Monthly Study Hours
+* Total Study Hours
+* Subject-wise Hours
+* Average Study Hours
+* Total Sessions
+* Longest Study Streak
+* Current Study Streak
+
+---
+
+# Research Module (Optional)
+
+Research should be optional.
+
+Allow me to create unlimited research topics.
+
+Each topic contains:
+
+* Research Title
+* Folder
+* Notes
+* Time Spent
+* Papers
+* Files
+* Status
+* Next Action
+
+Research sessions should use the same study session system.
+
+---
+
+# Project Management
+
+Include a Projects module.
+
+Do NOT create predefined projects.
+
+I should manually create projects whenever needed.
+
+Each project should contain:
+
+* Project Name
+* Category
+* Folder
+* Description
+* Progress %
+* Status
+* Priority
+* Deadline (Optional)
+* Tasks
+* Milestones
+* Time Spent
+* Notes
+* Tags
+* Attachments
+
+Projects should be completely user-defined.
+
+---
+
+# Folder System
+
+Create a built-in folder organization system.
+
+Examples
+
+Academics
+
+Research
+
+Projects
+
+Personal
+
+When I create a new Subject, Project, or Research Topic for the first time, ask me which folder it belongs to.
+
+Remember my choice.
+
+Allow me to change the folder later in Settings.
+
+---
+
+# History System
+
+Maintain a complete history of everything.
+
+Every study session should be permanently stored.
+
+Every research session should be stored.
+
+Every project update should be stored.
+
+Provide:
+
+Daily Timeline
+
+Weekly Timeline
+
+Monthly Timeline
+
+Yearly Timeline
+
+GitHub-style activity heatmap
+
+Search by:
+
+Date
+
+Subject
+
+Project
+
+Research
+
+Folder
+
+Tags
+
+I should be able to review any study session from any previous date.
+
+---
+
+# Calendar
+
+Include
+
+Monthly Calendar
+
+Weekly Calendar
+
+Daily Timeline
+
+Clicking a date should display:
+
+Study Sessions
+
+Research
+
+Projects
+
+Notes
+
+Prayer
+
+Exercise
+
+---
+
+# Exam Planner
+
+Allow me to create exams.
+
+Each exam should include:
+
+Subject
+
+Exam Name
+
+Date
+
+Priority
+
+Preparation %
+
+Remaining Chapters
+
+Notes
+
+Display countdown automatically.
+
+Highlight upcoming exams.
+
+---
+
+# Exercise
+
+Simple tracker only.
+
+One checkbox.
+
+Exercise Completed Today
+
+Show:
+
+Weekly Completion
+
+Monthly Completion
+
+---
+
+# Prayer
+
+Simple tracker only.
+
+Five checkboxes.
+
+* Fajr
+* Dhuhr
+* Asr
+* Maghrib
+* Isha
+
+Display:
+
+Today's Summary
+
+Weekly Summary
+
+Monthly Summary
+
+Do NOT calculate any productivity score using prayers.
+
+---
+
+# Notes
+
+Rich text editor.
+
+Markdown support.
+
+Code blocks.
+
+Images.
+
+PDF attachments.
+
+Tags.
+
+Search.
+
+---
+
+# Global Search
+
+Search everything.
+
+Subjects
+
+Projects
+
+Research
+
+Study Sessions
+
+Notes
+
+Exams
+
+Folders
+
+Tags
+
+---
+
+# Analytics
+
+Create a professional Analytics page.
+
+This page is extremely important.
+
+Include beautiful interactive charts.
+
+Show:
+
+Daily Study Hours
+
+Weekly Study Hours
+
+Monthly Study Hours
+
+Yearly Study Hours
+
+Rolling 7-Day Average
+
+Rolling 30-Day Average
+
+Subject Distribution
+
+Research Hours
+
+Study Streak
+
+Research Streak
+
+Most Studied Subject
+
+Most Productive Week
+
+Most Productive Month
+
+Average Focus Rating
+
+Average Session Length
+
+Study Heatmap
+
+Current Semester Progress
+
+Comparison
+
+Current Week vs Previous Week
+
+Current Month vs Previous Month
+
+Current Semester vs Previous Semester
+
+The charts should clearly show whether I am improving over time.
+
+---
+
+# AI Assistant
+
+Create an integrated AI assistant.
+
+The assistant should only use my stored database.
+
+It should answer questions like:
+
+"What did I study yesterday?"
+
+"How many hours have I studied Heat Transfer?"
+
+"What subject needs more attention?"
+
+"What exams are coming soon?"
+
+"What did I accomplish this week?"
+
+"Summarize my research."
+
+"What should I study today?"
+
+---
+
+# Database
+
+Design a professional normalized PostgreSQL database.
+
+Avoid duplicate data.
+
+Use proper relationships.
+
+Keep everything scalable.
+
+---
+
+# Code Quality
+
+Use:
+
+Clean Architecture
+
+Reusable Components
+
+TypeScript
+
+FastAPI Best Practices
+
+Well-structured folders
+
+Reusable APIs
+
+Proper validation
+
+Error handling
+
+Good documentation
+
+---
+
+# Development Process
+
+Do NOT generate the entire application in one response.
+
+Break the project into phases.
+
+Phase 1
+
+Requirements Review
+
+Phase 2
+
+System Architecture
+
+Phase 3
+
+Database Design
+
+Phase 4
+
+Backend API
+
+Phase 5
+
+Authentication
+
+Phase 6
+
+Frontend Layout
+
+Phase 7
+
+Dashboard
+
+Phase 8
+
+Academic Module
+
+Phase 9
+
+Research Module
+
+Phase 10
+
+Projects
+
+Phase 11
+
+Analytics
+
+Phase 12
+
+AI Assistant
+
+Phase 13
+
+Testing
+
+At the end of every phase:
+
+* Explain your design decisions.
+* Explain why they are good.
+* Suggest improvements if necessary.
+* Wait for my approval before moving to the next phase.
+
+Never skip a phase.
+
+The final application should be professional enough to use throughout my Mechanical Engineering degree and future career.

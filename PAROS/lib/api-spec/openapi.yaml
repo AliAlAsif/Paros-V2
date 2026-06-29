@@ -1,0 +1,1771 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: PAROS – Personal Academic & Research Operating System API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: folders
+    description: Folder organization
+  - name: subjects
+    description: Subject management
+  - name: study-sessions
+    description: Study session tracking
+  - name: research-topics
+    description: Research topic management
+  - name: projects
+    description: Project management
+  - name: project-tasks
+    description: Project task management
+  - name: exams
+    description: Exam planner
+  - name: notes
+    description: Note-taking
+  - name: prayer-logs
+    description: Prayer tracker
+  - name: exercise-logs
+    description: Exercise tracker
+  - name: dashboard
+    description: Dashboard summary
+  - name: analytics
+    description: Analytics and charts
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  # ─── Folders ───────────────────────────────────────────────────────────────
+  /folders:
+    get:
+      operationId: listFolders
+      tags: [folders]
+      summary: List all folders
+      responses:
+        "200":
+          description: List of folders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Folder"
+    post:
+      operationId: createFolder
+      tags: [folders]
+      summary: Create a folder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FolderInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Folder"
+
+  /folders/{id}:
+    patch:
+      operationId: updateFolder
+      tags: [folders]
+      summary: Update a folder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FolderUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Folder"
+    delete:
+      operationId: deleteFolder
+      tags: [folders]
+      summary: Delete a folder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Subjects ──────────────────────────────────────────────────────────────
+  /subjects:
+    get:
+      operationId: listSubjects
+      tags: [subjects]
+      summary: List subjects
+      parameters:
+        - name: includeArchived
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of subjects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subject"
+    post:
+      operationId: createSubject
+      tags: [subjects]
+      summary: Create a subject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubjectInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subject"
+
+  /subjects/{id}:
+    get:
+      operationId: getSubject
+      tags: [subjects]
+      summary: Get subject details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Subject
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subject"
+    patch:
+      operationId: updateSubject
+      tags: [subjects]
+      summary: Update a subject
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubjectUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subject"
+    delete:
+      operationId: deleteSubject
+      tags: [subjects]
+      summary: Delete a subject
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Study Sessions ─────────────────────────────────────────────────────────
+  /study-sessions:
+    get:
+      operationId: listStudySessions
+      tags: [study-sessions]
+      summary: List study sessions
+      parameters:
+        - name: subjectId
+          in: query
+          schema:
+            type: integer
+        - name: sessionKind
+          in: query
+          schema:
+            type: string
+            enum: [study, research]
+        - name: dateFrom
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of study sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StudySession"
+    post:
+      operationId: createStudySession
+      tags: [study-sessions]
+      summary: Create a study session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudySessionInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudySession"
+
+  /study-sessions/{id}:
+    get:
+      operationId: getStudySession
+      tags: [study-sessions]
+      summary: Get a study session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Study session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudySession"
+    patch:
+      operationId: updateStudySession
+      tags: [study-sessions]
+      summary: Update a study session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudySessionUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudySession"
+    delete:
+      operationId: deleteStudySession
+      tags: [study-sessions]
+      summary: Delete a study session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /study-sessions/stats/summary:
+    get:
+      operationId: getStudyStats
+      tags: [study-sessions]
+      summary: Get aggregated study statistics
+      responses:
+        "200":
+          description: Study statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudyStats"
+
+  # ─── Research Topics ────────────────────────────────────────────────────────
+  /research-topics:
+    get:
+      operationId: listResearchTopics
+      tags: [research-topics]
+      summary: List research topics
+      responses:
+        "200":
+          description: List of research topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ResearchTopic"
+    post:
+      operationId: createResearchTopic
+      tags: [research-topics]
+      summary: Create a research topic
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResearchTopicInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResearchTopic"
+
+  /research-topics/{id}:
+    get:
+      operationId: getResearchTopic
+      tags: [research-topics]
+      summary: Get research topic details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Research topic
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResearchTopic"
+    patch:
+      operationId: updateResearchTopic
+      tags: [research-topics]
+      summary: Update a research topic
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResearchTopicUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResearchTopic"
+    delete:
+      operationId: deleteResearchTopic
+      tags: [research-topics]
+      summary: Delete a research topic
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Projects ──────────────────────────────────────────────────────────────
+  /projects:
+    get:
+      operationId: listProjects
+      tags: [projects]
+      summary: List projects
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+    post:
+      operationId: createProject
+      tags: [projects]
+      summary: Create a project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+  /projects/{id}:
+    get:
+      operationId: getProject
+      tags: [projects]
+      summary: Get project details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+    patch:
+      operationId: updateProject
+      tags: [projects]
+      summary: Update a project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+    delete:
+      operationId: deleteProject
+      tags: [projects]
+      summary: Delete a project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Project Tasks ─────────────────────────────────────────────────────────
+  /projects/{projectId}/tasks:
+    get:
+      operationId: listProjectTasks
+      tags: [project-tasks]
+      summary: List tasks for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProjectTask"
+    post:
+      operationId: createProjectTask
+      tags: [project-tasks]
+      summary: Create a task for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectTaskInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectTask"
+
+  /projects/{projectId}/tasks/{taskId}:
+    patch:
+      operationId: updateProjectTask
+      tags: [project-tasks]
+      summary: Update a project task
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectTaskUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectTask"
+    delete:
+      operationId: deleteProjectTask
+      tags: [project-tasks]
+      summary: Delete a project task
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Exams ─────────────────────────────────────────────────────────────────
+  /exams:
+    get:
+      operationId: listExams
+      tags: [exams]
+      summary: List exams
+      parameters:
+        - name: upcoming
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of exams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Exam"
+    post:
+      operationId: createExam
+      tags: [exams]
+      summary: Create an exam
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExamInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Exam"
+
+  /exams/{id}:
+    patch:
+      operationId: updateExam
+      tags: [exams]
+      summary: Update an exam
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExamUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Exam"
+    delete:
+      operationId: deleteExam
+      tags: [exams]
+      summary: Delete an exam
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Notes ─────────────────────────────────────────────────────────────────
+  /notes:
+    get:
+      operationId: listNotes
+      tags: [notes]
+      summary: List notes
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: subjectId
+          in: query
+          schema:
+            type: integer
+        - name: tag
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of notes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Note"
+    post:
+      operationId: createNote
+      tags: [notes]
+      summary: Create a note
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NoteInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+
+  /notes/{id}:
+    get:
+      operationId: getNote
+      tags: [notes]
+      summary: Get a note
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Note
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+    patch:
+      operationId: updateNote
+      tags: [notes]
+      summary: Update a note
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NoteUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+    delete:
+      operationId: deleteNote
+      tags: [notes]
+      summary: Delete a note
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Prayer Logs ───────────────────────────────────────────────────────────
+  /prayer-logs:
+    get:
+      operationId: listPrayerLogs
+      tags: [prayer-logs]
+      summary: List prayer logs
+      parameters:
+        - name: dateFrom
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: List of prayer logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PrayerLog"
+    post:
+      operationId: upsertPrayerLog
+      tags: [prayer-logs]
+      summary: Upsert prayer log for a date
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrayerLogInput"
+      responses:
+        "200":
+          description: Upserted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrayerLog"
+
+  # ─── Exercise Logs ─────────────────────────────────────────────────────────
+  /exercise-logs:
+    get:
+      operationId: listExerciseLogs
+      tags: [exercise-logs]
+      summary: List exercise logs
+      parameters:
+        - name: dateFrom
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: List of exercise logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExerciseLog"
+    post:
+      operationId: upsertExerciseLog
+      tags: [exercise-logs]
+      summary: Upsert exercise log for a date
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExerciseLogInput"
+      responses:
+        "200":
+          description: Upserted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExerciseLog"
+
+  # ─── Dashboard ─────────────────────────────────────────────────────────────
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  # ─── Analytics ─────────────────────────────────────────────────────────────
+  /analytics/study-hours:
+    get:
+      operationId: getStudyHoursAnalytics
+      tags: [analytics]
+      summary: Get study hours over time
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [daily, weekly, monthly, yearly]
+            default: daily
+        - name: dateFrom
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Study hours data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudyHoursAnalytics"
+
+  /analytics/subject-distribution:
+    get:
+      operationId: getSubjectDistribution
+      tags: [analytics]
+      summary: Get hours distribution by subject
+      responses:
+        "200":
+          description: Subject distribution
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubjectDistributionItem"
+
+  /analytics/heatmap:
+    get:
+      operationId: getActivityHeatmap
+      tags: [analytics]
+      summary: Get GitHub-style activity heatmap data
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Heatmap data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/HeatmapEntry"
+
+  /analytics/streaks:
+    get:
+      operationId: getStreaks
+      tags: [analytics]
+      summary: Get current and longest study/research streaks
+      responses:
+        "200":
+          description: Streak data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StreakData"
+
+  /analytics/comparison:
+    get:
+      operationId: getComparison
+      tags: [analytics]
+      summary: Get period-over-period comparison
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [week, month, semester]
+            default: week
+      responses:
+        "200":
+          description: Comparison data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComparisonData"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    # ─── Folder ───────────────────────────────────────────────────────────────
+    Folder:
+      type: object
+      required: [id, name, type, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [academics, research, projects, personal, custom]
+        createdAt:
+          type: string
+          format: date-time
+
+    FolderInput:
+      type: object
+      required: [name, type]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          enum: [academics, research, projects, personal, custom]
+
+    FolderUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+
+    # ─── Subject ──────────────────────────────────────────────────────────────
+    Subject:
+      type: object
+      required: [id, name, semester, color, isArchived, progress, totalStudyHours, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        semester:
+          type: string
+        instructorName:
+          type: ["string", "null"]
+        credits:
+          type: ["number", "null"]
+        color:
+          type: string
+        notes:
+          type: ["string", "null"]
+        progress:
+          type: number
+          minimum: 0
+          maximum: 100
+        totalStudyHours:
+          type: number
+        isArchived:
+          type: boolean
+        folderId:
+          type: ["integer", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    SubjectInput:
+      type: object
+      required: [name, semester, color]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        semester:
+          type: string
+        instructorName:
+          type: string
+        credits:
+          type: number
+        color:
+          type: string
+        notes:
+          type: string
+        folderId:
+          type: integer
+
+    SubjectUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        semester:
+          type: string
+        instructorName:
+          type: string
+        credits:
+          type: number
+        color:
+          type: string
+        notes:
+          type: string
+        progress:
+          type: number
+        isArchived:
+          type: boolean
+        folderId:
+          type: integer
+
+    # ─── StudySession ─────────────────────────────────────────────────────────
+    StudySession:
+      type: object
+      required: [id, date, startTime, endTime, durationMinutes, sessionType, sessionKind, completionStatus, focusRating, createdAt]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+        startTime:
+          type: string
+        endTime:
+          type: string
+        durationMinutes:
+          type: integer
+        sessionType:
+          type: string
+          enum: ["10min", "30min", "60min", "custom"]
+        sessionKind:
+          type: string
+          enum: [study, research]
+        subjectId:
+          type: ["integer", "null"]
+        researchTopicId:
+          type: ["integer", "null"]
+        topic:
+          type: ["string", "null"]
+        goal:
+          type: ["string", "null"]
+        focusRating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        completionStatus:
+          type: string
+          enum: [completed, partial, cancelled]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    StudySessionInput:
+      type: object
+      required: [date, startTime, endTime, durationMinutes, sessionType, sessionKind, focusRating, completionStatus]
+      properties:
+        date:
+          type: string
+          format: date
+        startTime:
+          type: string
+        endTime:
+          type: string
+        durationMinutes:
+          type: integer
+        sessionType:
+          type: string
+          enum: ["10min", "30min", "60min", "custom"]
+        sessionKind:
+          type: string
+          enum: [study, research]
+        subjectId:
+          type: integer
+        researchTopicId:
+          type: integer
+        topic:
+          type: string
+        goal:
+          type: string
+        focusRating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        completionStatus:
+          type: string
+          enum: [completed, partial, cancelled]
+        notes:
+          type: string
+
+    StudySessionUpdate:
+      type: object
+      properties:
+        topic:
+          type: string
+        goal:
+          type: string
+        focusRating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        completionStatus:
+          type: string
+          enum: [completed, partial, cancelled]
+        notes:
+          type: string
+
+    StudyStats:
+      type: object
+      required: [todayMinutes, weekMinutes, monthMinutes, totalMinutes, currentStudyStreak, longestStudyStreak, currentResearchStreak, longestResearchStreak, totalSessions, averageSessionMinutes, averageFocusRating]
+      properties:
+        todayMinutes:
+          type: integer
+        weekMinutes:
+          type: integer
+        monthMinutes:
+          type: integer
+        totalMinutes:
+          type: integer
+        currentStudyStreak:
+          type: integer
+        longestStudyStreak:
+          type: integer
+        currentResearchStreak:
+          type: integer
+        longestResearchStreak:
+          type: integer
+        totalSessions:
+          type: integer
+        averageSessionMinutes:
+          type: number
+        averageFocusRating:
+          type: number
+
+    # ─── ResearchTopic ────────────────────────────────────────────────────────
+    ResearchTopic:
+      type: object
+      required: [id, title, status, timeSpentMinutes, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        folderId:
+          type: ["integer", "null"]
+        notes:
+          type: ["string", "null"]
+        timeSpentMinutes:
+          type: integer
+        papers:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [active, paused, completed, archived]
+        nextAction:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    ResearchTopicInput:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+          minLength: 1
+        folderId:
+          type: integer
+        notes:
+          type: string
+        papers:
+          type: string
+        status:
+          type: string
+          enum: [active, paused, completed, archived]
+        nextAction:
+          type: string
+
+    ResearchTopicUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        folderId:
+          type: integer
+        notes:
+          type: string
+        papers:
+          type: string
+        status:
+          type: string
+          enum: [active, paused, completed, archived]
+        nextAction:
+          type: string
+
+    # ─── Project ──────────────────────────────────────────────────────────────
+    Project:
+      type: object
+      required: [id, name, status, priority, progress, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: ["string", "null"]
+        folderId:
+          type: ["integer", "null"]
+        description:
+          type: ["string", "null"]
+        progress:
+          type: number
+          minimum: 0
+          maximum: 100
+        status:
+          type: string
+          enum: [planning, active, on_hold, completed, cancelled]
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        deadline:
+          type: ["string", "null"]
+          format: date
+        notes:
+          type: ["string", "null"]
+        tags:
+          type: ["string", "null"]
+        isPinned:
+          type: boolean
+        timeSpentMinutes:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    ProjectInput:
+      type: object
+      required: [name, status, priority]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        category:
+          type: string
+        folderId:
+          type: integer
+        description:
+          type: string
+        status:
+          type: string
+          enum: [planning, active, on_hold, completed, cancelled]
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        deadline:
+          type: string
+          format: date
+        notes:
+          type: string
+        tags:
+          type: string
+        isPinned:
+          type: boolean
+
+    ProjectUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        folderId:
+          type: integer
+        description:
+          type: string
+        progress:
+          type: number
+        status:
+          type: string
+          enum: [planning, active, on_hold, completed, cancelled]
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        deadline:
+          type: string
+          format: date
+        notes:
+          type: string
+        tags:
+          type: string
+        isPinned:
+          type: boolean
+
+    # ─── ProjectTask ──────────────────────────────────────────────────────────
+    ProjectTask:
+      type: object
+      required: [id, projectId, title, status, priority, createdAt]
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        title:
+          type: string
+        status:
+          type: string
+          enum: [todo, in_progress, done]
+        priority:
+          type: string
+          enum: [low, medium, high]
+        dueDate:
+          type: ["string", "null"]
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+
+    ProjectTaskInput:
+      type: object
+      required: [title, status, priority]
+      properties:
+        title:
+          type: string
+          minLength: 1
+        status:
+          type: string
+          enum: [todo, in_progress, done]
+        priority:
+          type: string
+          enum: [low, medium, high]
+        dueDate:
+          type: string
+          format: date
+
+    ProjectTaskUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        status:
+          type: string
+          enum: [todo, in_progress, done]
+        priority:
+          type: string
+          enum: [low, medium, high]
+        dueDate:
+          type: string
+          format: date
+
+    # ─── Exam ─────────────────────────────────────────────────────────────────
+    Exam:
+      type: object
+      required: [id, subjectId, name, examDate, priority, preparationPct, createdAt]
+      properties:
+        id:
+          type: integer
+        subjectId:
+          type: integer
+        name:
+          type: string
+        examDate:
+          type: string
+          format: date
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        preparationPct:
+          type: integer
+          minimum: 0
+          maximum: 100
+        remainingChapters:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        daysUntilExam:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    ExamInput:
+      type: object
+      required: [subjectId, name, examDate, priority]
+      properties:
+        subjectId:
+          type: integer
+        name:
+          type: string
+          minLength: 1
+        examDate:
+          type: string
+          format: date
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        preparationPct:
+          type: integer
+          minimum: 0
+          maximum: 100
+        remainingChapters:
+          type: string
+        notes:
+          type: string
+
+    ExamUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        examDate:
+          type: string
+          format: date
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        preparationPct:
+          type: integer
+          minimum: 0
+          maximum: 100
+        remainingChapters:
+          type: string
+        notes:
+          type: string
+
+    # ─── Note ─────────────────────────────────────────────────────────────────
+    Note:
+      type: object
+      required: [id, title, content, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        tags:
+          type: ["string", "null"]
+        subjectId:
+          type: ["integer", "null"]
+        projectId:
+          type: ["integer", "null"]
+        researchTopicId:
+          type: ["integer", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    NoteInput:
+      type: object
+      required: [title, content]
+      properties:
+        title:
+          type: string
+          minLength: 1
+        content:
+          type: string
+        tags:
+          type: string
+        subjectId:
+          type: integer
+        projectId:
+          type: integer
+        researchTopicId:
+          type: integer
+
+    NoteUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        tags:
+          type: string
+        subjectId:
+          type: integer
+        projectId:
+          type: integer
+        researchTopicId:
+          type: integer
+
+    # ─── PrayerLog ────────────────────────────────────────────────────────────
+    PrayerLog:
+      type: object
+      required: [id, date, fajr, dhuhr, asr, maghrib, isha]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+        fajr:
+          type: boolean
+        dhuhr:
+          type: boolean
+        asr:
+          type: boolean
+        maghrib:
+          type: boolean
+        isha:
+          type: boolean
+
+    PrayerLogInput:
+      type: object
+      required: [date]
+      properties:
+        date:
+          type: string
+          format: date
+        fajr:
+          type: boolean
+        dhuhr:
+          type: boolean
+        asr:
+          type: boolean
+        maghrib:
+          type: boolean
+        isha:
+          type: boolean
+
+    # ─── ExerciseLog ──────────────────────────────────────────────────────────
+    ExerciseLog:
+      type: object
+      required: [id, date, completed]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+        completed:
+          type: boolean
+
+    ExerciseLogInput:
+      type: object
+      required: [date, completed]
+      properties:
+        date:
+          type: string
+          format: date
+        completed:
+          type: boolean
+
+    # ─── Dashboard ────────────────────────────────────────────────────────────
+    DashboardSummary:
+      type: object
+      required: [date, todayStudyMinutes, weekStudyMinutes, monthStudyMinutes, todayResearchMinutes, currentStudyStreak, currentResearchStreak, upcomingExams, recentSessions, recentSubjects, pinnedProjects, prayerToday, exerciseToday]
+      properties:
+        date:
+          type: string
+          format: date
+        todayStudyMinutes:
+          type: integer
+        weekStudyMinutes:
+          type: integer
+        monthStudyMinutes:
+          type: integer
+        todayResearchMinutes:
+          type: integer
+        currentStudyStreak:
+          type: integer
+        currentResearchStreak:
+          type: integer
+        upcomingExams:
+          type: array
+          items:
+            $ref: "#/components/schemas/Exam"
+        recentSessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/StudySession"
+        recentSubjects:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subject"
+        pinnedProjects:
+          type: array
+          items:
+            $ref: "#/components/schemas/Project"
+        prayerToday:
+          oneOf:
+            - $ref: "#/components/schemas/PrayerLog"
+            - type: "null"
+        exerciseToday:
+          oneOf:
+            - $ref: "#/components/schemas/ExerciseLog"
+            - type: "null"
+
+    # ─── Analytics ────────────────────────────────────────────────────────────
+    StudyHoursDataPoint:
+      type: object
+      required: [label, studyMinutes, researchMinutes]
+      properties:
+        label:
+          type: string
+        date:
+          type: string
+        studyMinutes:
+          type: integer
+        researchMinutes:
+          type: integer
+
+    StudyHoursAnalytics:
+      type: object
+      required: [data, rolling7DayAvgMinutes, rolling30DayAvgMinutes, totalStudyMinutes, totalResearchMinutes]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/StudyHoursDataPoint"
+        rolling7DayAvgMinutes:
+          type: number
+        rolling30DayAvgMinutes:
+          type: number
+        totalStudyMinutes:
+          type: integer
+        totalResearchMinutes:
+          type: integer
+
+    SubjectDistributionItem:
+      type: object
+      required: [subjectId, subjectName, color, totalMinutes, percentage]
+      properties:
+        subjectId:
+          type: integer
+        subjectName:
+          type: string
+        color:
+          type: string
+        totalMinutes:
+          type: integer
+        percentage:
+          type: number
+
+    HeatmapEntry:
+      type: object
+      required: [date, count]
+      properties:
+        date:
+          type: string
+          format: date
+        count:
+          type: integer
+
+    StreakData:
+      type: object
+      required: [currentStudyStreak, longestStudyStreak, currentResearchStreak, longestResearchStreak]
+      properties:
+        currentStudyStreak:
+          type: integer
+        longestStudyStreak:
+          type: integer
+        currentResearchStreak:
+          type: integer
+        longestResearchStreak:
+          type: integer
+
+    ComparisonData:
+      type: object
+      required: [currentPeriodMinutes, previousPeriodMinutes, percentageChange, currentLabel, previousLabel]
+      properties:
+        currentPeriodMinutes:
+          type: integer
+        previousPeriodMinutes:
+          type: integer
+        percentageChange:
+          type: number
+        currentLabel:
+          type: string
+        previousLabel:
+          type: string

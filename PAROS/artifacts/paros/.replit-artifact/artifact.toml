@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "PAROS – Academic OS"
+version = "1.0.0"
+id = "artifacts/paros"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19638
+
+[services.development]
+run = "pnpm --filter @workspace/paros run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/paros", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/paros/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19638"
+BASE_PATH = "/"

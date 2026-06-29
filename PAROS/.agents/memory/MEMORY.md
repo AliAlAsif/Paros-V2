@@ -1,0 +1,2 @@
+- [PAROS stack decisions](paros-stack.md) — React+Vite+Drizzle+Express 5; date fields always strings not Date objects
+- [PAROS codegen workflow](paros-codegen.md) — orval codegen must re-run + typecheck:libs after every OpenAPI change
